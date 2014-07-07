@@ -96,8 +96,9 @@ public abstract class HCatScheme extends
             serDe.initialize(conf, tableMetadata);
         } catch (SerDeException e) {
             throw new RuntimeException("Unable to create serDe with name=" + serdeName + ", metadata=" + tableMetadata);
+        } catch (Exception e) {
+          throw new RuntimeException("Cannot createSerDe: " + serdeName, e);
         }
-
     }
 
     protected Deserializer getSerDe() {
