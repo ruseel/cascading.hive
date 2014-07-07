@@ -33,6 +33,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoFactory;
 import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hive.hcatalog.data.schema.HCatFieldSchema;
 import org.apache.hive.hcatalog.data.schema.HCatSchema;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+
 
 @SuppressWarnings({ "serial", "rawtypes" })
 public abstract class HCatScheme extends
@@ -89,7 +91,8 @@ public abstract class HCatScheme extends
 
     private void createSerDe(JobConf conf) {
         try {
-            serDe = SerDeUtils.lookupDeserializer(serdeName);
+            serDe = ReflectionUtils.newInstance(conf.getClassByName(serdeName).
+                        asSubclass(Deserializer.class), conf);
             serDe.initialize(conf, tableMetadata);
         } catch (SerDeException e) {
             throw new RuntimeException("Unable to create serDe with name=" + serdeName + ", metadata=" + tableMetadata);
