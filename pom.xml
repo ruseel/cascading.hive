@@ -26,7 +26,7 @@
         <hadoop1.version>1.2.1</hadoop1.version>
 		<hadoop2.version>2.2.0</hadoop2.version>
 		<cascading.version>2.5.0</cascading.version>
-		<hive.version>0.13.1</hive.version>
+		<hive.version>0.10.0-cdh4.6.0</hive.version>
 		<scala.version>2.10</scala.version>
 		<scalding.version>0.9.1</scalding.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,6 +55,10 @@
 		<repository>
 			<id>releases.sonatype.org</id>
 			<url>http://oss.sonatype.org/content/repositories/releases</url>
+		</repository>
+		<repository>
+			<id>cloudera</id>
+			<url>https://repository.cloudera.com/artifactory/libs-release</url>
 		</repository>
 	</repositories>
 
@@ -148,9 +152,9 @@
             </exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hive.hcatalog</groupId>
-			<artifactId>hive-hcatalog-core</artifactId>
-			<version>${hive.version}</version>
+			<groupId>org.apache.hcatalog</groupId>
+			<artifactId>hcatalog-core</artifactId>
+			<version>0.5.0-cdh4.6.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
