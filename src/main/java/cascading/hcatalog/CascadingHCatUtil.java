@@ -157,11 +157,13 @@ public class CascadingHCatUtil {
 			client = getHiveMetaStoreClient(jobConf);
 			
 			Table hiveTable = HCatUtil.getTable(client, db, table);
-			hiveTable.setDataLocation(new Path(path));
+			hiveTable.setDataLocation(new URI(path));
 			
 			client.alter_table(db, table, hiveTable.getTTable());
 		} catch (IOException e) {
-			logError("Error occured when getting hiveconf", e);
+            logError("Error occured when getting hiveconf", e);
+        } catch (URISyntaxException e) {
+            logError("Error occured when convert path to URI", e);
 		} catch (MetaException e) {
 			logError("Error occured when getting HiveMetaStoreClient", e);
 		} catch (NoSuchObjectException e) {
@@ -204,13 +206,6 @@ public class CascadingHCatUtil {
 		return HCatUtil.getHiveClient(hiveConf);
 	}
 
-	/**
-	 * Build {@link org.apache.hive.hcatalog.data.schema.HCatSchema} of table
-	 * from a list of {@link org.apache.hadoop.hive.metastore.api.FieldSchema}
-	 * 
-	 * @param columns
-	 * @return
-	 */
 	public static HCatSchema buildHCatSchema(List<FieldSchema> columns) {
 		HCatSchema schema = null;
 		
