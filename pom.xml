@@ -144,10 +144,15 @@
 			<groupId>org.apache.hive</groupId>
 			<artifactId>hive-exec</artifactId>
 			<version>${hive.version}</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.protobuf</groupId>
                     <artifactId>protobuf-java</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j</artifactId>
                 </exclusion>
             </exclusions>
 		</dependency>
@@ -234,73 +239,6 @@
 				</execution>
 			</executions>
 		</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>false</minimizeJar>
-                            <filters>
-                                <filter>
-                                    <artifact>org.apache.hive:hive-exec</artifact>
-                                    <includes>
-                                        <include>org/apache/hadoop/hive/**</include>
-                                        <include>org/apache/hive/**</include>
-                                    </includes>
-                                    <excludes>
-                                        <exclude>org/apache/hadoop/hive/ql/io/orc/OrcOutputFormat.class</exclude>
-                                        <exclude>org/apache/hadoop/hive/ql/io/orc/OrcProto.class</exclude>
-                                        <exclude>org/apache/hadoop/hive/ql/io/orc/OrcSerde.class</exclude>
-                                        <exclude>org/apache/hadoop/hive/ql/io/orc/OrcStruct.class</exclude>
-                                        <exclude>org/apache/hadoop/hive/serde2/SerDeUtils.class</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <!-- Do not include datanucleus dependencies to avoid plugin.xml conflict,
-                            you have to explicitly include these jars in classpath via '-libjars' option  -->
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.datanucleus:datanucleus-api-jdo</exclude>
-                                    <exclude>org.datanucleus:datanucleus-core</exclude>
-                                    <exclude>org.datanucleus:datanucleus-rdbms</exclude>
-                                    <!-- Do not rely on minimizeJar, exclude more dependencies to make the jar smaller-->
-                                    <exclude>antlr:antlr</exclude>
-                                    <exclude>org.antlr:antlr</exclude>
-                                    <exclude>org.antlr:antlr-runtime</exclude>
-                                    <exclude>org.antlr:stringtemplate</exclude>
-                                    <exclude>org.antlr:ST4</exclude>
-                                    <exclude>org.apache.avro:avro</exclude>
-                                    <exclude>org.apache.avro:avro-ipc</exclude>
-                                    <exclude>org.apache.avro:avro-mapred</exclude>
-                                    <exclude>org.apache.derby:derby</exclude>
-                                    <exclude>org.mortbay.jetty:servlet-api</exclude>
-                                    <exclude>org.jboss.netty:netty</exclude>
-                                    <exclude>org.apache.zookeeper:zookeeper</exclude>
-                                    <exclude>org.mortbay.jetty:jetty</exclude>
-                                    <exclude>org.mortbay.jetty:jetty-util</exclude>
-                                    <exclude>org.mockito:mockito-all</exclude>
-                                    <exclude>org.apache.httpcomponents:httpcore</exclude>
-                                    <exclude>org.apache.httpcomponents:httpclient</exclude>
-                                    <exclude>org.codehaus.jackson:jackson-mapper-asl</exclude>
-                                    <exclude>com.google.code.findbugs:jsr305</exclude>
-                                    <exclude>org.apache.ant:ant</exclude>
-                                    <exclude>org.eclipse.jetty.aggregate:jetty-all</exclude>
-                                    <exclude>org.apache.zookeeper:zookeeper</exclude>
-                                    <exclude>jline:jline</exclude>
-                                    <exclude>org.codehaus.groovy:groovy-all</exclude>
-                                    <exclude>org.apache.hive:hive-metastore</exclude>
-                                </excludes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 		</plugins>
 	</build>
 </project>
