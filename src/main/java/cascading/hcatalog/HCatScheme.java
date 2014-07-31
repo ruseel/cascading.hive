@@ -273,7 +273,7 @@ public abstract class HCatScheme extends
 			SinkCall<Object[], OutputCollector> sinkCall) throws IOException {
 		TupleEntry tupleEntry = sinkCall.getOutgoingEntry();
 
-		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(), columnsFromFields(tupleEntry.getFields()),
+		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(), columns,
 				sinkCall.getContext(), sinkCall.getOutput());
 	}
 
