@@ -138,12 +138,10 @@ public abstract class HCatScheme extends
         if (fields == null) {
             setSourceFields(fieldsFromSchema);
             setSinkFields(fieldsFromSchema);
-            this.columns = columnsFromFields(fields);
         } else {
             //validate(fieldsFromSchema);
             setSourceFields(fields);
             setSinkFields(fields);
-            this.columns = columnsFromFields(fields);
         }
         return fieldsFromSchema;
     }
