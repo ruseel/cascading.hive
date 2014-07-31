@@ -63,9 +63,13 @@ public class DefaultHCatScheme extends HCatScheme {
 	public DefaultHCatScheme(String table, String filter, Fields sourceFields) {
 		this(null, table, filter, sourceFields);
 	}
+
+    public DefaultHCatScheme(String db, String table, String filter, Fields sourceFields) {
+        super(db, table, filter, sourceFields, null);
+    }
 	
-	public DefaultHCatScheme(String db, String table, String filter, Fields sourceFields) {
-		super(db, table, filter, sourceFields);
+	public DefaultHCatScheme(String db, String table, String filter, Fields sourceFields, String[] columns) {
+		super(db, table, filter, sourceFields, columns);
 	}
 
 
@@ -117,7 +121,7 @@ public class DefaultHCatScheme extends HCatScheme {
 	 * org.apache.hadoop.mapred.OutputCollector)
 	 */
 	@Override
-	protected void writeValue(Tuple tuple, Fields fields, Object[] context, OutputCollector output) throws IOException {
+	protected void writeValue(Tuple tuple, Fields fields, List<String> columns, Object[] context, OutputCollector output) throws IOException {
 		List<HCatFieldSchema> tableFields = (List<HCatFieldSchema>) context[2];
 		
 		List<Object> content = (List<Object>) context[1];
@@ -125,7 +129,10 @@ public class DefaultHCatScheme extends HCatScheme {
 		
 		for (HCatFieldSchema tableField : tableFields) {
 			try {
-				int pos = fields.getPos(tableField.getName());
+                // int pos = fields.getPos(tableField.getName());
+                System.out.println("tuple = [" + tuple + "], fields = [" + fields + "], columns = [" + columns + "], context = [" + context + "], output = [" + output + "]");
+
+                int pos = columns.indexOf(tableField.getName());
 				
 				content.add(tuple.getObject(pos));
 			} catch (FieldsResolverException e) {

@@ -38,12 +38,10 @@ import org.apache.hcatalog.data.schema.HCatFieldSchema;
 import org.apache.hcatalog.data.schema.HCatSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.annotation.meta.field;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 
 @SuppressWarnings({ "serial", "rawtypes" })
@@ -59,6 +57,7 @@ public abstract class HCatScheme extends
 	private int randomNumber;
 	private HCatSchema hCatSchema;
 	private Fields fields;
+    private List<String> columns;
 
     private String serdeName;
     private Properties tableMetadata;
@@ -80,14 +79,34 @@ public abstract class HCatScheme extends
 	 *                write filter
 	 */
 	public HCatScheme(String db, String table, String filter,
-			Fields sourceFields) {
-		this.db = CascadingHCatUtil.hcatDefaultDBIfNull(db);
+			Fields sourceFields, String[] columns) {
+        System.out.println("db = [" + db + "], table = [" + table + "], filter = [" + filter + "], sourceFields = [" + sourceFields + "], columns = [" + columns + "]");
+
+        this.db = CascadingHCatUtil.hcatDefaultDBIfNull(db);
 		this.table = table;
 		this.filter = filter;
 		this.fields = sourceFields;
+        if (columns != null) {
+            this.columns = Arrays.asList(columns);
+        } else {
+            this.columns = columnsFromFields(this.fields);
+        }
+
 
 		randomNumber = new Random(System.currentTimeMillis()).nextInt();
 	}
+
+    private List<String> columnsFromFields(Fields fields) {
+        if (fields == null) return null;
+
+        ArrayList<String> r = new ArrayList<String>();
+        Iterator it = fields.iterator();
+        while (it.hasNext()) {
+            Object field = it.next();
+            r.add((String) field);
+        }
+        return r;
+    }
 
     private void createSerDe(JobConf conf) {
         try {
@@ -123,10 +142,12 @@ public abstract class HCatScheme extends
         if (fields == null) {
             setSourceFields(fieldsFromSchema);
             setSinkFields(fieldsFromSchema);
+            this.columns = columnsFromFields(fields);
         } else {
             validate(fieldsFromSchema);
             setSourceFields(fields);
             setSinkFields(fields);
+            this.columns = columnsFromFields(fields);
         }
         return fieldsFromSchema;
     }
@@ -252,7 +273,7 @@ public abstract class HCatScheme extends
 			SinkCall<Object[], OutputCollector> sinkCall) throws IOException {
 		TupleEntry tupleEntry = sinkCall.getOutgoingEntry();
 
-		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(),
+		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(), columnsFromFields(tupleEntry.getFields()),
 				sinkCall.getContext(), sinkCall.getOutput());
 	}
 
@@ -261,12 +282,12 @@ public abstract class HCatScheme extends
 	 * @param tuple
 	 * @param fields
 	 *            The fields that are bound to tuple entry
-	 * @param context
-	 * @param output
-	 * @throws IOException
+	 * @param columns
+     *@param context
+     * @param output   @throws IOException
 	 */
 	protected abstract void writeValue(Tuple tuple, Fields fields,
-			Object[] context, OutputCollector output) throws IOException;
+                                       List<String> columns, Object[] context, OutputCollector output) throws IOException;
 
 	@Override
 	public void sourceCleanup(FlowProcess<JobConf> flowProcess,
