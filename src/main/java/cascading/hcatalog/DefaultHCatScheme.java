@@ -133,8 +133,11 @@ public class DefaultHCatScheme extends HCatScheme {
                 System.out.println("tuple = [" + tuple + "], fields = [" + fields + "], columns = [" + columns + "], context = [" + context + "], output = [" + output + "]");
 
                 int pos = columns.indexOf(tableField.getName());
-				
-				content.add(tuple.getObject(pos));
+                if (pos == -1) {
+                    content.add(null);
+                } else {
+                    content.add(tuple.getObject(pos));
+                }
 			} catch (FieldsResolverException e) {
 				// Table field doesn't exist in tuple. Use default value
 				// It is fine if tuple field doesn't exist in table, just ignore
