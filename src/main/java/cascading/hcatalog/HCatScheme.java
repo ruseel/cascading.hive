@@ -37,6 +37,7 @@ import org.apache.hive.hcatalog.data.schema.HCatFieldSchema;
 import org.apache.hive.hcatalog.data.schema.HCatSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.annotation.meta.field;
 
 import java.io.IOException;
 import java.util.*;
@@ -77,14 +78,33 @@ public abstract class HCatScheme extends
 	 */
 	public HCatScheme(String db, String table, String filter,
 			Fields sourceFields, String[] columns) {
-		this.db = CascadingHCatUtil.hcatDefaultDBIfNull(db);
+        System.out.println("db = [" + db + "], table = [" + table + "], filter = [" + filter + "], sourceFields = [" + sourceFields + "], columns = [" + columns + "]");
+
+        this.db = CascadingHCatUtil.hcatDefaultDBIfNull(db);
 		this.table = table;
 		this.filter = filter;
 		this.fields = sourceFields;
-        this.columns = Arrays.asList(columns);
+        if (columns != null) {
+            this.columns = Arrays.asList(columns);
+        } else {
+            this.columns = columnsFromFields(this.fields);
+        }
+
 
 		randomNumber = new Random(System.currentTimeMillis()).nextInt();
 	}
+
+    private List<String> columnsFromFields(Fields fields) {
+        if (fields == null) return null;
+
+        ArrayList<String> r = new ArrayList<String>();
+        Iterator it = fields.iterator();
+        while (it.hasNext()) {
+            Object field = it.next();
+            r.add((String) field);
+        }
+        return r;
+    }
 
     private void createSerDe(JobConf conf) {
         try {
@@ -118,10 +138,12 @@ public abstract class HCatScheme extends
         if (fields == null) {
             setSourceFields(fieldsFromSchema);
             setSinkFields(fieldsFromSchema);
+            this.columns = columnsFromFields(fields);
         } else {
             validate(fieldsFromSchema);
             setSourceFields(fields);
             setSinkFields(fields);
+            this.columns = columnsFromFields(fields);
         }
         return fieldsFromSchema;
     }
@@ -247,7 +269,7 @@ public abstract class HCatScheme extends
 			SinkCall<Object[], OutputCollector> sinkCall) throws IOException {
 		TupleEntry tupleEntry = sinkCall.getOutgoingEntry();
 
-		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(), columns,
+		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(), columnsFromFields(tupleEntry.getFields()),
 				sinkCall.getContext(), sinkCall.getOutput());
 	}
 

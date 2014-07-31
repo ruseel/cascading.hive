@@ -129,7 +129,9 @@ public class DefaultHCatScheme extends HCatScheme {
 		
 		for (HCatFieldSchema tableField : tableFields) {
 			try {
-                //int pos = fields.getPos(tableField.getName());
+                // int pos = fields.getPos(tableField.getName());
+                System.out.println("tuple = [" + tuple + "], fields = [" + fields + "], columns = [" + columns + "], context = [" + context + "], output = [" + output + "]");
+
                 int pos = columns.indexOf(tableField.getName());
 				
 				content.add(tuple.getObject(pos));
