@@ -140,7 +140,7 @@ public abstract class HCatScheme extends
             setSinkFields(fieldsFromSchema);
             this.columns = columnsFromFields(fields);
         } else {
-            validate(fieldsFromSchema);
+            //validate(fieldsFromSchema);
             setSourceFields(fields);
             setSinkFields(fields);
             this.columns = columnsFromFields(fields);
