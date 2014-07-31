@@ -39,10 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings({ "serial", "rawtypes" })
 public abstract class HCatScheme extends
@@ -57,6 +54,7 @@ public abstract class HCatScheme extends
 	private int randomNumber;
 	private HCatSchema hCatSchema;
 	private Fields fields;
+    private List<String> columns;
 
     private String serdeName;
     private Properties tableMetadata;
@@ -78,11 +76,12 @@ public abstract class HCatScheme extends
 	 *                write filter
 	 */
 	public HCatScheme(String db, String table, String filter,
-			Fields sourceFields) {
+			Fields sourceFields, String[] columns) {
 		this.db = CascadingHCatUtil.hcatDefaultDBIfNull(db);
 		this.table = table;
 		this.filter = filter;
 		this.fields = sourceFields;
+        this.columns = Arrays.asList(columns);
 
 		randomNumber = new Random(System.currentTimeMillis()).nextInt();
 	}
@@ -248,7 +247,7 @@ public abstract class HCatScheme extends
 			SinkCall<Object[], OutputCollector> sinkCall) throws IOException {
 		TupleEntry tupleEntry = sinkCall.getOutgoingEntry();
 
-		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(),
+		writeValue(tupleEntry.getTuple(), tupleEntry.getFields(), columns,
 				sinkCall.getContext(), sinkCall.getOutput());
 	}
 
@@ -257,12 +256,12 @@ public abstract class HCatScheme extends
 	 * @param tuple
 	 * @param fields
 	 *            The fields that are bound to tuple entry
-	 * @param context
-	 * @param output
-	 * @throws IOException
+	 * @param columns
+     *@param context
+     * @param output   @throws IOException
 	 */
 	protected abstract void writeValue(Tuple tuple, Fields fields,
-			Object[] context, OutputCollector output) throws IOException;
+                                       List<String> columns, Object[] context, OutputCollector output) throws IOException;
 
 	@Override
 	public void sourceCleanup(FlowProcess<JobConf> flowProcess,
