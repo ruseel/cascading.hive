@@ -133,6 +133,9 @@ public class DefaultHCatScheme extends HCatScheme {
                 System.out.println("tuple = [" + tuple + "], fields = [" + fields + "], columns = [" + columns + "], context = [" + context + "], output = [" + output + "]");
 
                 int pos = columns.indexOf(tableField.getName());
+                System.out.println("tableField.getName() = " + tableField.getName());
+                System.out.println("pos = " + pos);
+
                 if (pos == -1) {
                     content.add(null);
                 } else {
