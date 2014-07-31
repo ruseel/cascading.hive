@@ -186,7 +186,7 @@ public class HCatTap extends Tap<JobConf, RecordReader, OutputCollector> {
         if (tap.commitResource(conf)) {
             if (path != null) {
                 // Set the path as the new table location
-                // return CascadingHCatUtil.setDataStorageLocation(db, table, filter, path, conf);
+                return CascadingHCatUtil.setDataStorageLocation(db, table, filter, path, conf);
             }
             return true;
 		} else {
