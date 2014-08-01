@@ -70,7 +70,16 @@ public class HCatTap extends Tap<JobConf, RecordReader, OutputCollector> {
 		this(db, table, filter, null, path, null, SinkMode.REPLACE);
 	}
 
-/**
+
+    public HCatTap(String db, String table, String filter,
+                   Scheme<JobConf,RecordReader,OutputCollector,?,?> hCatScheme,
+                   String path,
+                   Fields sourceField,
+                   SinkMode sinkMode) {
+        this(db, table, filter, hCatScheme, path, sourceField, null, sinkMode);
+    }
+
+    /**
 	 * Construct a new HCatTap instance.
 	 * 
 	 * @param db
