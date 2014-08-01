@@ -91,12 +91,13 @@ public class HCatTap extends Tap<JobConf, RecordReader, OutputCollector> {
                    Scheme<JobConf,RecordReader,OutputCollector,?,?> hCatScheme,
                    String path,
                    Fields sourceField,
+                   String[] columns,
 			       SinkMode sinkMode) {
 		super(hCatScheme, sinkMode);
 
 		// Use the default scheme if it is null
 		if (hCatScheme == null) {
-			setScheme(new DefaultHCatScheme(db, table, filter, sourceField));
+			setScheme(new DefaultHCatScheme(db, table, filter, sourceField, columns));
 		}
 
 		this.db = CascadingHCatUtil.hcatDefaultDBIfNull(db);
