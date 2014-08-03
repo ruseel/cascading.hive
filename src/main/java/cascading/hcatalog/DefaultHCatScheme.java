@@ -96,12 +96,17 @@ public class DefaultHCatScheme extends HCatScheme {
 	@Override
 	protected void readValue(Tuple tuple, Object value) {
 		HCatSchema hCatSchema = getHCatSchema();
-		try {
+        System.out.println("hCatSchema = " + hCatSchema);
+        try {
 			Object object = getSerDe().deserialize((Writable) value);
+            System.out.println("object = " + object);
+
 			HCatRecord record = new LazyHCatRecord(object,
                     getSerDe().getObjectInspector());
+            System.out.println("record = " + record);
 
 			Fields fields = getSourceFields();
+            System.out.println("fields = " + fields);
 
 			for (int i = 0; i < fields.size(); i++) {
 				tuple.add(record.get((String) fields.get(i), hCatSchema));
