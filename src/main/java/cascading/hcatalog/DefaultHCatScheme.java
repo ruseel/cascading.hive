@@ -96,7 +96,6 @@ public class DefaultHCatScheme extends HCatScheme {
 	@Override
 	protected void readValue(Tuple tuple, Object value) {
 		HCatSchema hCatSchema = getHCatSchema();
-        System.out.println("hCatSchema = " + hCatSchema);
         try {
 			Object object = getSerDe().deserialize((Writable) value);
             System.out.println("object = " + object);
@@ -110,9 +109,12 @@ public class DefaultHCatScheme extends HCatScheme {
 
 			for (int i = 0; i < fields.size(); i++) {
                 System.out.println("fields.get(i) = " + fields.get(i));
+                System.out.println("hCatSchema == null = " + (hCatSchema == null));
                 tuple.add(record.get((String) fields.get(i), hCatSchema));
-			}
-		} catch (Exception e) {
+                System.out.println("tuple.add() finished");
+            }
+            System.out.println("loop exit");
+        } catch (Exception e) {
 			throw new CascadeException(
 					"Error occured when deserializing value", e);
 		}
