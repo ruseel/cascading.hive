@@ -83,6 +83,7 @@ public abstract class HCatScheme extends
         this.db = CascadingHCatUtil.hcatDefaultDBIfNull(db);
 		this.table = table;
 		this.filter = filter;
+        setSourceFields(sourceFields);
 		this.fields = sourceFields;
         if (columns != null) {
             this.columns = Arrays.asList(columns);
