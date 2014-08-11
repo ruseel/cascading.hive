@@ -162,7 +162,9 @@ public class HCatTap extends Tap<JobConf, RecordReader, OutputCollector> {
 	@Override
 	public TupleEntryIterator openForRead(FlowProcess<JobConf> flowProcess,
 			RecordReader input) throws IOException {
-		return tap.openForRead(flowProcess, input);
+        System.out.println("tap = " + tap);
+        System.out.println("flowProcess = [" + flowProcess + "], input = [" + input + "]");
+        return tap.openForRead(flowProcess, input);
 	}
 
 	@Override
