@@ -48,7 +48,9 @@ class TapFactory {
 
 	private static Tap createTap(Scheme scheme, List<String> paths,
                                  boolean source) {
-		int size = paths.size();
+        System.out.println("TapFactory.createTap");
+        System.out.println("scheme = [" + scheme + "], paths = [" + paths + "], source = [" + source + "]");
+        int size = paths.size();
 
 		if (size == 1) {
 			// Non-partitioned table

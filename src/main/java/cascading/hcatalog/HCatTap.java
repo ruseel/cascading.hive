@@ -135,6 +135,7 @@ public class HCatTap extends Tap<JobConf, RecordReader, OutputCollector> {
                 CascadingHCatUtil.getDataStorageLocation(db, table, filter,
                         conf));
 
+        System.out.println("sourceConfInit tap = " + tap);
 		tap.sourceConfInit(process, conf);
 	}
 
