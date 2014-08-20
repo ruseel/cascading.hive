@@ -104,7 +104,8 @@ public class DefaultHCatScheme extends HCatScheme {
 			Fields fields = getSourceFields();
 
 			for (int i = 0; i < fields.size(); i++) {
-				tuple.add(record.get((String) fields.get(i), hCatSchema));
+                System.out.println("i = " + i + ", " + fields.size() + ", " + record.size());
+                tuple.add(record.get((String) fields.get(i), hCatSchema));
 			}
 		} catch (Exception e) {
 			throw new CascadeException(
