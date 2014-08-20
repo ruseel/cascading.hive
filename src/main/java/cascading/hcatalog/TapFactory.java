@@ -32,7 +32,9 @@ class TapFactory {
 	 * @return a single Tap or a MultiSourceTap
 	 */
 	public static Tap createSourceTap(Scheme scheme, List<String> paths) {
-		return createTap(scheme, paths, true);
+        System.out.println("TapFactory.createSourceTap");
+        System.out.println("scheme = [" + scheme + "], paths = [" + paths + "]");
+        return createTap(scheme, paths, true);
 	}
 
     /**
@@ -43,7 +45,9 @@ class TapFactory {
      * @return  a single Tap or a MultiSinkTap
      */
 	public static Tap createSinkTap(Scheme scheme, List<String> paths) {
-		return createTap(scheme, paths, false);
+        System.out.println("TapFactory.createSinkTap");
+        System.out.println("scheme = [" + scheme + "], paths = [" + paths + "]");
+        return createTap(scheme, paths, false);
 	}
 
 	private static Tap createTap(Scheme scheme, List<String> paths,

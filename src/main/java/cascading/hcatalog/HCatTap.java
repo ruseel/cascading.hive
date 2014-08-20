@@ -104,7 +104,9 @@ public class HCatTap extends Tap<JobConf, RecordReader, OutputCollector> {
 			       SinkMode sinkMode) {
 		super(hCatScheme, sinkMode);
 
-		// Use the default scheme if it is null
+        System.out.println("db = [" + db + "], table = [" + table + "], filter = [" + filter + "], hCatScheme = [" + hCatScheme + "], path = [" + path + "], sourceField = [" + sourceField + "], columns = [" + columns + "], sinkMode = [" + sinkMode + "]");
+
+        // Use the default scheme if it is null
 		if (hCatScheme == null) {
 			setScheme(new DefaultHCatScheme(db, table, filter, sourceField, columns));
 		}
