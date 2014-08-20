@@ -150,7 +150,8 @@ public class HCatTap extends Tap<JobConf, RecordReader, OutputCollector> {
 			pathes.add(path);
 		}
 
-		tap = TapFactory.createSinkTap(getScheme(), pathes);
+        System.out.println("pathes = " + pathes);
+        tap = TapFactory.createSinkTap(getScheme(), pathes);
 		tap.sinkConfInit(process, conf);
 	}
 
