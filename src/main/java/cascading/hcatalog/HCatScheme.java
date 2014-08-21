@@ -200,8 +200,8 @@ public abstract class HCatScheme extends
 	public void sinkConfInit(FlowProcess<JobConf> flowProcess,
 			Tap<JobConf, RecordReader, OutputCollector> tap, JobConf conf) {
 		conf.setOutputFormat(outputFormat);
-        conf.set(HiveProps.HIVE_COLUMNS, (String)tableMetadata.get(HiveProps.HIVE_COLUMNS));
-        conf.set(HiveProps.HIVE_COLUMN_TYPES, (String)tableMetadata.get(HiveProps.HIVE_COLUMN_TYPES));
+        //conf.set(HiveProps.HIVE_COLUMNS, (String)tableMetadata.get(HiveProps.HIVE_COLUMNS));
+        //conf.set(HiveProps.HIVE_COLUMN_TYPES, (String)tableMetadata.get(HiveProps.HIVE_COLUMN_TYPES));
         createSerDe(conf);
 	}
 
